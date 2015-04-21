@@ -110,7 +110,7 @@ class SearchScreen extends Component {
             },
             error => {
                 this.setState({
-                    message: 'There was a problem with obtaining your location: ' + error,
+                    message: 'There was a problem while obtaining your location: ' + error.message,
                     isWaiting: false
                 });
             }
