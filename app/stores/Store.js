@@ -11,14 +11,14 @@ class Store {
     /**
      * Class constructor
      * 
-     * @param  {Object} eventEmitter
+     * @param  {Object} dispatcher
      * @param  {string} name
      * @param  {Object} handlers
      * @return {void}
      */
-    constructor(eventEmitter, name, handlers = {}) {
-        if (eventEmitter) {
-            this.setEventEmitter(eventEmitter);
+    constructor(dispatcher, name, handlers = {}) {
+        if (dispatcher) {
+            this.setDispatcher(dispatcher);
         }
 
         this._name = name;
@@ -45,15 +45,15 @@ class Store {
      * @param {Object} handlers
      */
     setHandlers(handlers) {
-        var eventEmitter = this.getEventEmitter();
+        var dispatcher = this.getDispatcher();
 
-        if (eventEmitter && this._handlers) {
+        if (dispatcher && this._handlers) {
             removeActionHandlers(this);
         }
 
         this._handlers = handlers;
 
-        if (eventEmitter) registerActionHandlers(this);
+        if (dispatcher) registerActionHandlers(this);
     }
 
     /**
@@ -66,29 +66,29 @@ class Store {
     }
 
     /**
-     * Sets the eventEmitter that will take care of action dispatching in the store.
+     * Sets the dispatcher that will take care of action dispatching in the store.
      *
-     * @param {Object} eventEmitter
+     * @param {Object} dispatcher
      */
-    setEventEmitter(eventEmitter) {
+    setDispatcher(dispatcher) {
         var handlers = this.getHandlers();
 
-        if (handlers && this._eventEmitter) {
+        if (handlers && this._dispatcher) {
             removeActionHandlers(this);
         }
 
-        this._eventEmitter = eventEmitter;
+        this._dispatcher = dispatcher;
 
         if (handlers) registerActionHandlers(this);
     }
 
     /**
-     * Gets the eventEmitter instance.
+     * Gets the dispatcher instance.
      *
      * @return {Object}
      */
-    getEventEmitter() {
-        return this._eventEmitter;
+    getDispatcher() {
+        return this._dispatcher;
     }
 
     /**
@@ -101,12 +101,12 @@ class Store {
     }
 
     /**
-     * Register a listener that will be notified of every change that hgetEventEmitter()ens in the store
+     * Register a listener that will be notified of every change that hgetDispatcher()ens in the store
      *
      * @param {Function} listener
      */
     registerListener(listener) {
-        this.getEventEmitter().on(this.getChangeActionName(), listener);
+        this.getDispatcher().on(this.getChangeActionName(), listener);
     }
 
     /**
@@ -115,14 +115,14 @@ class Store {
      * @param {Function} listener
      */
     removeListener(listener) {
-        this.getEventEmitter().off(this.getChangeActionName(), listener);
+        this.getDispatcher().off(this.getChangeActionName(), listener);
     }
 
     /**
      * Notifies all listeners that the store has changed its state
      */
     emitChanges() {
-        this.getEventEmitter().emit(this.getChangeActionName(), this);
+        this.getDispatcher().dispatch(this.getChangeActionName(), this);
     }
 }
 
@@ -135,7 +135,7 @@ function registerActionHandlers(store) {
     var handlers = store.getHandlers();
 
     for(var actionName in handlers) {
-        store.getEventEmitter().on(actionName, handlers[actionName]);
+        store.getDispatcher().on(actionName, handlers[actionName]);
     }
 }
 
@@ -148,7 +148,7 @@ function removeActionHandlers(store) {
     var handlers = store.getHandlers();
 
     for(var actionName in handlers) {
-        store.getEventEmitter().off(actionName, handlers[actionName]);
+        store.getDispatcher().off(actionName, handlers[actionName]);
     }
 }
 

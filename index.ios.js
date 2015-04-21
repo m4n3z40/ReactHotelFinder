@@ -13,14 +13,17 @@ var {
 } = React;
 
 //Instatiate the 'global' event emitter object
-var EventEmitter = require('./app/utils/EventEmitter');
-var eventEmitter = new EventEmitter();
+var Dispatcher = require('./app/utils/Dispatcher');
+var dispatcher = new Dispatcher();
 
-//requiring the hotel store passing the event emitter object
-var HotelsStore = require('./app/stores/HotelsStore')(eventEmitter);
+//requiring the hotel store passing the dispatcher object
+var HotelsStore = require('./app/stores/hotels')(dispatcher);
 
-//requiring the hotel actions passing the event emitter object
-var HotelsActions = require('./app/actions/hotels')(eventEmitter);
+//requiring the hotel service passing the dispatcher object
+var HotelsService = require('./app/services/hotels')(dispatcher);
+
+//requiring the hotel actions passing the service object
+var HotelsActions = require('./app/actions/hotels')(HotelsService);
 
 //requiring the initial component
 var SearchScreen = require('./app/components/SearchScreen');

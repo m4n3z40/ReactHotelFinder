@@ -5,14 +5,14 @@
  * @return {string}
  */
 function normalizeImageUrl(imageUrl) {
-	var imageUrlSegments = imageUrl.split('/'),
-		imageName = imageUrlSegments.pop();
+    var imageUrlSegments = imageUrl.split('/'),
+        imageName = imageUrlSegments.pop();
 
-	imageUrlSegments.push(encodeURIComponent(imageName));
+    imageUrlSegments.push(encodeURIComponent(imageName));
 
-	return imageUrlSegments.join('/');
+    return imageUrlSegments.join('/');
 }
 
 module.exports = {
-	normalizeImageUrl: normalizeImageUrl
+    normalizeImageUrl: normalizeImageUrl
 };

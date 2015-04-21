@@ -1,6 +1,6 @@
 'use strict';
 
-class EventEmitter {
+class Dispatcher {
     /**
      * Creates an instance of the event mediator
      *
@@ -56,7 +56,7 @@ class EventEmitter {
      * @param {string} event
      * @param {Object} payload
      */
-    emit(event, ...payload) {
+    dispatch(event, ...payload) {
         var registry = this._registry,
             dispatching = this._dispatching;
 
@@ -64,9 +64,7 @@ class EventEmitter {
 
         dispatching.push(event);
 
-        registry[event].forEach(function(handler) {
-            handler(...payload);
-        });
+        registry[event].forEach(handler => handler(...payload));
 
         dispatching.splice(dispatching.indexOf(event), 1);
     }
@@ -95,4 +93,4 @@ class EventEmitter {
     }
 }
 
-module.exports = EventEmitter;
+module.exports = Dispatcher;
